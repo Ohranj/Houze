@@ -15,6 +15,13 @@ https://www.xlmeapp.com/
 
 ## Development
 
+### Docker
+```
+docker compose build
+docker exec -it houze_app bash
+npm run dev
+```
+
 ### Git Hooks
 
 #### Pre-commit
