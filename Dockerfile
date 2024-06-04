@@ -76,5 +76,5 @@ USER $user
 
 ##Build and run image
 # docker compose build
-# docker exec -it houze_app basj
+# docker exec -it houze_app bash
 # npm run dev
