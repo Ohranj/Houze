@@ -2,6 +2,7 @@ https://www.xlmeapp.com/
 
 - [Setup](#setup)
     - [Dev Env](#development)
+        - Docker
         - Git Hooks
             - [Pre-commit](#pre-commit)
         - Git Actions
