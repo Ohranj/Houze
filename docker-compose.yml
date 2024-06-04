@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: no
+    container_name: houze_app
+    volumes:
+      - ./:/var/www
+    ports:
+      - 5173:5173
+  nginx:
+    image: nginx:latest
+    restart: no
+    container_name: 'houze_web_server'
+    volumes:
+      - ./:/var/www
+      - ./docker-configs/nginx:/etc/nginx/conf.d
+    ports:
+      - 80:80
+  db:
+    image: mysql:8.3.0
+    restart: no
+    container_name: houze_db
+    volumes:
+      - ./docker-configs/mysql:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD:-password}
+      - MYSQL_DATABASE=${DB_DATABASE:-xlme-v1}
+      - MYSQL_USER=${DB_USERNAME:-xlme}
+      - MYSQL_PASSWORD=${DB_PASSWORD:-password}
+    ports:
+      - 3306:3306
