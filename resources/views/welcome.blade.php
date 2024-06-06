@@ -1,23 +1,24 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<x-guest-layout>
+    @section('js')
+    @vite(['resources/js/graphicHome.js'])
+    @endsection
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <x-slot name="main">
+        <div x-data="welcome">
+            <div class="flex justify-center" id="graphic"></div>
+            <x-btn-pill text="Sign in with Google" class="hover:bg-indigo-50 mx-auto" isFunc="false">
+                <x-slot name="icon">
+                    <x-svg.google class="w-6 h-6" />
+                </x-slot>
+            </x-btn-pill>
+        </div>
+    </x-slot>
+</x-guest-layout>
 
-    <title>Laravel</title>
-
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
-
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
-
-<body class="font-sans antialiased dark:bg-black dark:text-white/50">
-    <div class="bg-gray-50 text-black/50 dark:bg-black dark:text-white/50">
-        <p class="text-red-500">here</p>
-    </div>
-</body>
-
-</html>
+<script>
+    const welcome = () => ({
+        init() {
+            console.log(1)
+        }
+    })
+</script>
