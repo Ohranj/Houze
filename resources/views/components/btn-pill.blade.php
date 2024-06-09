@@ -2,14 +2,14 @@
 
 @if ($isFunc)
 
-<button {{ $attributes->merge(['class' => 'rounded-full py-1 px-2 shadow font-medium flex items-center gap-2']) }} @click="{{ $call }}">
+<button {{ $attributes->merge(['class' => 'rounded-full shadow font-medium flex items-center gap-1.5']) }} @click="{{ $call }}">
     {{ $icon }}
     <span>{{ $text }}</span>
 </button>
 
 @else
 
-<button {{ $attributes->merge(['class' => 'rounded-full py-1 px-2 shadow font-medium flex items-center gap-2']) }}>
+<button {{ $attributes->merge(['class' => 'rounded-full shadow font-medium flex items-center gap-1.5']) }}>
     {{ $icon }}
     <span>{{ $text }}</span>
 </button>

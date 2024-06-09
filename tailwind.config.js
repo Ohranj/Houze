@@ -13,6 +13,9 @@ export default {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
+            colors: {
+                modal: '#cbd5e150'
+            }
         },
     },
 
