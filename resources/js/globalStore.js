@@ -7,7 +7,7 @@ document.addEventListener('alpine:init', () => {
             this.autoRemoveOnDelay()
         },
         async autoRemoveOnDelay() {
-            await new Promise((res) => setTimeout(() => res(), 5000));
+            await new Promise((res) => setTimeout(() => res(), 6000));
             this.list.splice(0, 1);
         }
     })

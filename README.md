@@ -2,6 +2,9 @@ https://www.xlmeapp.com/
 
 - [Setup](#setup)
     - [Dev Env](#development)
+        - Artisan Commands
+            - [Seeding Dummy Data](#seeding-dummy-data)
+        - Database
         - Docker
         - Git Hooks
             - [Pre-commit](#pre-commit)
@@ -9,11 +12,30 @@ https://www.xlmeapp.com/
     - Prod Env
         - Server script
 
+
   
   
 # Setup  
 
 ## Development
+
+### Artisan Commands
+
+#### Seeding Dummy Data
+Command can be found at -> App/Console/Commsds/SeedDummyData.php
+
+This command works to populate your database and can be ran via:
+```
+php artisan app:seed-dummy-data
+```
+This command will run the following 2 Artisan commands
+```
+php artisan migrate:fresh
+php artisan db:seed --class=DummySeeder
+```
+Of note, the command will fail if your current environment is not set to 'local'
+
+### Database
 
 ### Docker
 ```

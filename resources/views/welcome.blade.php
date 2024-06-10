@@ -23,36 +23,37 @@
             <x-modal showVar=modals.getStarted.show title="Let's get you started!">
                 <x-slot:content>
                     <div x-show="!modals.getStarted.success" class="p-4 sm:p-6 space-y-8">
-                        <h2 class="text-xl">Use the form below to create your account.</h2>
+                        <h2 class="text-xl">Use the form below to easily create your account.</h2>
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-2 space-y-4">
                             <div class="flex flex-col col-span-2">
                                 <label class="font-medium">Email Address <sup>*</sup></label>
                                 <div class="flex items-center gap-4">
-                                    <input type="email" class="rounded-lg grow" placeholder="..." x-model="modals.getStarted.credentials.email" />
-                                    <span class="hidden lg:inline-block w-6 h-6 rounded-full" :class="isValidEmail() ? 'bg-green-500' : 'border'"></span>
+                                    <input type="email" class="rounded-lg grow" placeholder="..." @input.debounce="isValidEmail()" x-model="modals.getStarted.credentials.email.value" />
+                                    <span class="hidden lg:inline-block w-6 h-6 rounded-full" :class="modals.getStarted.credentials.email.valid ? 'bg-green-500' : 'border'"></span>
                                 </div>
                             </div>
                             <div class="flex flex-col col-span-2">
                                 <label class="font-medium">Create a Username <sup>*</sup></label>
                                 <div class="flex items-center gap-4">
-                                    <input type="text" class="rounded-lg grow" placeholder="R.Prior" x-model="modals.getStarted.credentials.username" />
-                                    <span class="hidden lg:inline-block w-6 h-6 rounded-full" :class="isValidUsername() ? 'bg-green-500' : 'border'"></span>
+                                    <input type="text" class="rounded-lg grow" placeholder="R.Prior" @input.debounce="isValidUsername()" x-model="modals.getStarted.credentials.username.value" />
+                                    <span class="hidden lg:inline-block w-6 h-6 rounded-full" :class="modals.getStarted.credentials.username.valid ? 'bg-green-500' : 'border'"></span>
                                 </div>
+                                <small x-cloak x-show="modals.getStarted.credentials.username.hasChecked" class="italic relative top-1" :class="modals.getStarted.credentials.username.valid ? 'text-green-600' : 'text-red-600'" x-text="modals.getStarted.credentials.username.valid ? 'Username available' : 'Username already taken'"></small>
                             </div>
                             <div class="flex items-center col-span-2 relative">
                                 <div class="grid w-full lg:w-fit lg:grid-cols-2 gap-4 lg:gap-2">
                                     <div class="flex flex-col w-full">
                                         <label class="font-medium">Password <sup>*</sup></label>
-                                        <input type="password" class="rounded-lg" placeholder="..." x-model="modals.getStarted.credentials.password" />
+                                        <input type="password" class="rounded-lg" placeholder="..." @input.debounce="isValidPassword()" x-model="modals.getStarted.credentials.password.value" />
                                     </div>
                                     <div class="flex flex-col w-full">
                                         <label class="font-medium">Confirm your Password <sup>*</sup></label>
-                                        <input type="password" class="rounded-lg" placeholder="..." x-model="modals.getStarted.credentials.password_confirmation" />
+                                        <input type="password" class="rounded-lg" placeholder="..." @input.debounce="isValidPassword()" x-model="modals.getStarted.credentials.password_confirmation.value" />
                                     </div>
                                 </div>
-                                <span class="hidden lg:inline-block w-6 h-6 rounded-full absolute bottom-[10px] right-0" :class="isValidPassword() ? 'bg-green-500' : 'border'"></span>
+                                <span class="hidden lg:inline-block w-6 h-6 rounded-full absolute bottom-[10px] right-0" :class="modals.getStarted.credentials.password.valid ? 'bg-green-500' : 'border'"></span>
                             </div>
-                            <small class="col-span-2 italic relative -top-4 left-0">Passwords require at least 12 characters and a number.</small>
+                            <small class="col-span-2 italic relative -top-5 left-0">Passwords require at least 12 characters and a number.</small>
                         </div>
                         <x-btn-pill text="Confirm" class="py-1.5 px-3 mx-auto shadow-indigo-600 bg-indigo-500 hover:bg-indigo-600 text-white" isFunc="true" call="createAccountConfirmBtnPressed">
                             <x-slot name="icon">
@@ -90,13 +91,29 @@
         modals: {
             getStarted: {
                 show: false,
-                credentials: {},
+                credentials: {
+                    password: {},
+                    password_confirmation: {},
+                    email: {},
+                    username: {}
+                },
                 success: false,
                 error: {
                     show: [],
                     messages: []
                 }
             }
+        },
+        init() {
+            this.$watch('modals.getStarted.show', (state) => {
+                if (state) return
+                this.modals.getStarted.credentials = {
+                    password: {},
+                    password_confirmation: {},
+                    email: {},
+                    username: {}
+                }
+            })
         },
         isValidPassword() {
             const {
@@ -105,12 +122,12 @@
             } = this.modals.getStarted.credentials;
 
             try {
-                if (password.length < 12) throw 'Invalid length';
-                if (password != password_confirmation) throw 'Invalid match';
-                if (!/\d/.test(password)) throw 'Invalid string';
-                return true
+                if (password.value.length < 12) throw 'Invalid length';
+                if (password.value != password_confirmation.value) throw 'Invalid match';
+                if (!/\d/.test(password.value)) throw 'Invalid string';
+                password.valid = true;
             } catch (err) {
-                return false;
+                password.valid = false;
             }
         },
         isValidEmail() {
@@ -119,20 +136,41 @@
             } = this.modals.getStarted.credentials;
 
             try {
-                if (!email.length || email?.length < 3) throw 'Invalid length';
-                if (!/@/.test(email)) throw 'Invalid string';
-                return true;
+                if (!email.value.length || email.value?.length < 3) throw 'Invalid length';
+                if (!/@/.test(email.value)) throw 'Invalid string';
+                email.valid = true
             } catch (err) {
-                return false;
+                email.valid = false
             }
         },
-        isValidUsername() {
-            return this.modals.getStarted.credentials.username?.length > 5
-            //Check backend - Have debounce with spinner
+        async isValidUsername() {
+            const {
+                username
+            } = this.modals.getStarted.credentials;
+            username.hasChecked = false;
+            try {
+                if (!username.value.length || username.value?.length < 2) throw 'Invalid string';
+                const params = new URLSearchParams({
+                    username: username.value
+                })
+                const response = await fetch('/validate-username-status?' + params);
+                const json = await response.json();
+                username.hasChecked = true;
+                if (!response.ok) throw 'Invalid string';
+                username.valid = true;
+            } catch (err) {
+                username.valid = false;
+            }
         },
         createAccountConfirmBtnPressed() {
-            if (!this.isValidEmail() || !this.isValidUsername() || !this.isValidPassword()) {
-                Alpine.store('toast').toggle('Please make sure all fields are completed correctly.', false);
+            const {
+                password,
+                password_confirmation,
+                username,
+                email
+            } = this.modals.getStarted.credentials;
+            if (!email.valid || !username.valid || !password.valid) {
+                Alpine.store('toast').toggle('Please make sure all fields are completed correctly before confirming your account.', false);
                 return;
             }
             alert(2)
