@@ -41,6 +41,7 @@ Of note, the command will fail if your current environment is not set to 'local'
 ```
 docker compose build
 docker exec -it houze_app bash
+npm install ----------- Required one time to generate dependencies from package.json
 npm run dev
 ```
 

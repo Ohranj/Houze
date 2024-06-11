@@ -42,5 +42,7 @@ class SeedDummyData extends Command
 
         $this->call('migrate:fresh');
         $this->call('db:seed', ['class' => 'DummySeeder']);
+
+        $this->info('Command complete.');
     }
 }
