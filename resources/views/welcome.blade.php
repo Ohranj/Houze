@@ -4,7 +4,7 @@
     @endpush
 
     <x-slot name="main">
-        <div class="h-full flex flex-col" x-data="welcome">
+        <div class="h-full flex flex-col" x-data="welcome({csrfToken: '{{ csrf_token() }}'})">
             <x-unique.guest-nav />
 
             <div class="grow grid place-content-center relative" id="c_container">
@@ -28,14 +28,14 @@
                             <div class="flex flex-col col-span-2">
                                 <label class="font-medium">Email Address <sup>*</sup></label>
                                 <div class="flex items-center gap-4">
-                                    <input type="email" class="rounded-lg grow" placeholder="..." @input.debounce="isValidEmail()" x-model="modals.getStarted.credentials.email.value" />
+                                    <input type="email" class="rounded-lg grow" placeholder="..." @input.debounce.250ms="isValidEmail()" x-model="modals.getStarted.credentials.email.value" />
                                     <span class="hidden lg:inline-block w-6 h-6 rounded-full" :class="modals.getStarted.credentials.email.valid ? 'bg-green-500' : 'border'"></span>
                                 </div>
                             </div>
                             <div class="flex flex-col col-span-2">
                                 <label class="font-medium">Create a Username <sup>*</sup></label>
                                 <div class="flex items-center gap-4">
-                                    <input type="text" class="rounded-lg grow" placeholder="R.Prior" @input.debounce="isValidUsername()" x-model="modals.getStarted.credentials.username.value" />
+                                    <input type="text" class="rounded-lg grow" placeholder="R.Prior" @input.debounce.500ms="isValidUsername()" x-model="modals.getStarted.credentials.username.value" />
                                     <span class="hidden lg:inline-block w-6 h-6 rounded-full" :class="modals.getStarted.credentials.username.valid ? 'bg-green-500' : 'border'"></span>
                                 </div>
                                 <small x-cloak x-show="modals.getStarted.credentials.username.hasChecked" class="italic relative top-1" :class="modals.getStarted.credentials.username.valid ? 'text-green-600' : 'text-red-600'" x-text="modals.getStarted.credentials.username.valid ? 'Username available' : 'Username already taken'"></small>
@@ -44,11 +44,11 @@
                                 <div class="grid w-full lg:w-fit lg:grid-cols-2 gap-4 lg:gap-2">
                                     <div class="flex flex-col w-full">
                                         <label class="font-medium">Password <sup>*</sup></label>
-                                        <input type="password" class="rounded-lg" placeholder="..." @input.debounce="isValidPassword()" x-model="modals.getStarted.credentials.password.value" />
+                                        <input type="password" class="rounded-lg" placeholder="..." @input.debounce.250ms="isValidPassword()" x-model="modals.getStarted.credentials.password.value" />
                                     </div>
                                     <div class="flex flex-col w-full">
                                         <label class="font-medium">Confirm your Password <sup>*</sup></label>
-                                        <input type="password" class="rounded-lg" placeholder="..." @input.debounce="isValidPassword()" x-model="modals.getStarted.credentials.password_confirmation.value" />
+                                        <input type="password" class="rounded-lg" placeholder="..." @input.debounce.250ms="isValidPassword()" x-model="modals.getStarted.credentials.password_confirmation.value" />
                                     </div>
                                 </div>
                                 <span class="hidden lg:inline-block w-6 h-6 rounded-full absolute bottom-[10px] right-0" :class="modals.getStarted.credentials.password.valid ? 'bg-green-500' : 'border'"></span>
@@ -87,7 +87,7 @@
 </x-guest-layout>
 
 <script>
-    const welcome = () => ({
+    const welcome = (e) => ({
         modals: {
             getStarted: {
                 show: false,
@@ -162,7 +162,7 @@
                 username.valid = false;
             }
         },
-        createAccountConfirmBtnPressed() {
+        async createAccountConfirmBtnPressed() {
             const {
                 password,
                 password_confirmation,
@@ -173,7 +173,27 @@
                 Alpine.store('toast').toggle('Please make sure all fields are completed correctly before confirming your account.', false);
                 return;
             }
-            alert(2)
-        }
+            const response = await fetch('/register', {
+                method: 'POST',
+                body: JSON.stringify({
+                    password: password.value,
+                    password_confirmation: password_confirmation.value,
+                    username: username.value,
+                    email: email.value
+                }),
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': this.csrfToken
+                }
+            });
+            const json = await response.json();
+            if (!response.ok) {
+                Alpine.store('toast').toggle(json.message, false);
+                return;
+            }
+            Alpine.store('toast').toggle(json.message);
+        },
+        ...e
     })
 </script>

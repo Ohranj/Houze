@@ -6,7 +6,7 @@ namespace App\Traits;
 
 use Illuminate\Http\JsonResponse;
 
-trait JsonResponseTrait
+trait ReturnJsonResponse
 {
     public function returnJson(bool $success, string $message, array $data, int $status): JsonResponse
     {

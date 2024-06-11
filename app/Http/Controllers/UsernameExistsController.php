@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Traits\JsonResponseTrait;
+use App\Traits\ReturnJsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class UsernameExistsController extends Controller
 {
-    use JsonResponseTrait;
+    use ReturnJsonResponse;
 
     /**
      * Handle the incoming request.
