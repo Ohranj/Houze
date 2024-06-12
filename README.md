@@ -9,6 +9,8 @@ https://www.xlmeapp.com/
         - Git Hooks
             - [Pre-commit](#pre-commit)
         - Git Actions
+        - Tests
+            - [Feature](#feature)
     - Prod Env
         - Server script
 
@@ -57,3 +59,12 @@ filesFormattedWithPint=(${files// / })
 git add $files
 echo "${#filesFormattedWithPint[@]} files reformatted with Laravel Pint and inital files added back into commit"
 ```
+
+
+### Tests
+
+#### Feature
+Feature tests are used for core abilities of the application. Testing makes use of the PHPUnit framework
+```
+php artisan test --filter Feature
+``` 

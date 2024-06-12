@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Auth;
 
+use App\Actions\User\CreateUser;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\RegisterRequest;
-use App\Models\User;
 use App\Traits\ReturnJsonResponse;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 
 class RegisteredUserController extends Controller
 {
@@ -22,20 +20,13 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function __invoke(RegisterRequest $request): JsonResponse
+    public function __invoke(RegisterRequest $request, CreateUser $createUser): JsonResponse
     {
+        $user = $createUser->execute(params: $request->validated());
+
+        //Fire an email as well
+        //Auth::login($user);
+
         return $this->returnJson(success: true, message: 'Registration confirmed!', data: [], status: 201);
-
-        // $user = User::create([
-        //     'name' => $request->name,
-        //     'email' => $request->email,
-        //     'password' => Hash::make($request->password),
-        // ]);
-
-        // event(new Registered($user));
-
-        // Auth::login($user);
-
-        // return redirect(route('dashboard', absolute: false));
     }
 }

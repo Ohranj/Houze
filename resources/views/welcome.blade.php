@@ -193,6 +193,7 @@
                 return;
             }
             Alpine.store('toast').toggle(json.message);
+            this.modals.getStarted.show = false;
         },
         ...e
     })

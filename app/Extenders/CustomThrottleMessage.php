@@ -25,6 +25,6 @@ class CustomThrottleMessage extends ThrottleRequests
 
         return is_callable($responseCallback)
             ? new HttpResponseException($responseCallback($request, $headers))
-            : new ThrottleRequestsException('Too Many Attempts. Please allow 1 minute before trying again.', null, $headers);
+            : new ThrottleRequestsException('Too Many Attempts made. Please allow 1 minute before trying again.', null, $headers);
     }
 }
