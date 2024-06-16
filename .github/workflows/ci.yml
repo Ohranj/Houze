@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  push:
+
+jobs:
+  tests:
+    name: Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.3
+          extensions: curl, libxml, mbstring, zip, pdo, pdo_mysql
+          coverage: none
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-interaction --no-suggest
+      - name: Install NPM dependencies
+        run: npm install
+      - name: Compile assets
+        run: npm run build
+      - name: Execute tests
+        run: vendor/bin/phpunit --verbose

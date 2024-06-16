@@ -8,7 +8,8 @@ https://www.xlmeapp.com/
         - Docker
         - Git Hooks
             - [Pre-commit](#pre-commit)
-        - Git Actions
+        - Github Actions
+            - [CI](#ci)
         - Tests
             - [Feature](#feature)
     - Prod Env
@@ -59,6 +60,11 @@ filesFormattedWithPint=(${files// / })
 git add $files
 echo "${#filesFormattedWithPint[@]} files reformatted with Laravel Pint and inital files added back into commit"
 ```
+
+### Github Actions
+
+#### CI
+A .github/workflows/ci.yml file exists that runs the features tests on push.
 
 
 ### Tests
