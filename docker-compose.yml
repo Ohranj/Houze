@@ -28,8 +28,8 @@ services:
       - ./docker-configs/mysql:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=${DB_PASSWORD:-password}
-      - MYSQL_DATABASE=${DB_DATABASE:-xlme-v1}
-      - MYSQL_USER=${DB_USERNAME:-xlme}
-      - MYSQL_PASSWORD=${DB_PASSWORD:-password}
+      - MYSQL_DATABASE=${DB_DATABASE:-local}
+      - MYSQL_USER=${DB_USERNAME:-root}
+      - MYSQL_PASSWORD=${DB_PASSWORD:-admin}
     ports:
       - 3306:3306

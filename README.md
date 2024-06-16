@@ -2,12 +2,19 @@ https://www.xlmeapp.com/
 
 - [Setup](#setup)
     - [Dev Env](#development)
+        - Artisan Commands
+            - [Seeding Dummy Data](#seeding-dummy-data)
+        - Database
         - Docker
         - Git Hooks
             - [Pre-commit](#pre-commit)
-        - Git Actions
+        - Github Actions
+            - [CI](#ci)
+        - Tests
+            - [Feature](#feature)
     - Prod Env
         - Server script
+
 
   
   
@@ -15,10 +22,29 @@ https://www.xlmeapp.com/
 
 ## Development
 
+### Artisan Commands
+
+#### Seeding Dummy Data
+Command can be found at -> App/Console/Commsds/SeedDummyData.php
+
+This command works to populate your database and can be ran via:
+```
+php artisan app:seed-dummy-data
+```
+This command will run the following 2 Artisan commands
+```
+php artisan migrate:fresh
+php artisan db:seed --class=DummySeeder
+```
+Of note, the command will fail if your current environment is not set to 'local'
+
+### Database
+
 ### Docker
 ```
 docker compose build
 docker exec -it houze_app bash
+npm install ----------- Required one time to generate dependencies from package.json
 npm run dev
 ```
 
@@ -34,3 +60,17 @@ filesFormattedWithPint=(${files// / })
 git add $files
 echo "${#filesFormattedWithPint[@]} files reformatted with Laravel Pint and inital files added back into commit"
 ```
+
+### Github Actions
+
+#### CI
+A .github/workflows/ci.yml file exists that runs the features tests on push.
+
+
+### Tests
+
+#### Feature
+Feature tests are used for core abilities of the application. Testing makes use of the PHPUnit framework
+```
+php artisan test --filter Feature
+``` 
