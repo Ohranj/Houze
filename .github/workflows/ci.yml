@@ -24,5 +24,7 @@ jobs:
         run: npm install
       - name: Compile assets
         run: npm run build
+      - name: Create database file
+        run: touch database/database.sqlite
       - name: Execute tests
         run: php artisan test --filter Feature
