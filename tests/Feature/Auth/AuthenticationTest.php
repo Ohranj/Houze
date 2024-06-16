@@ -14,6 +14,8 @@ class AuthenticationTest extends TestCase
 
     public function test_login_screen_can_be_rendered(): void
     {
+
+        $this->withoutExceptionHandling();
         $response = $this->get('/');
 
         $response->assertStatus(200);
