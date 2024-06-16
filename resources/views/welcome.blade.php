@@ -7,16 +7,38 @@
         <div class="h-full flex flex-col" x-data="welcome({csrfToken: '{{ csrf_token() }}'})">
             <x-unique.guest-nav />
 
-            <div class="grow grid place-content-center relative" id="c_container">
-                <!-- <div class="flex justify-center" id="graphic"></div> -->
-                <div class="z-10">
-                    <x-link-pill href="/" text="Sign in with Google" class="border shadow-xl hover:shadow-indigo-100 hover:shadow-md hover:bg-indigo-50 bg-white py-1.5 px-3">
+            <div class="grow grid place-content-center relative gap-8" id="c_container">
+                <div class="z-10 rounded-md shadow w-[475px] p-6 space-y-6 bg-white border relative overflow-hidden">
+                    <div class="w-[50px] h-[50px] absolute -right-[25px] -top-[25px] rounded-full bg-indigo-600"></div>
+                    <h1 class="text-xl font-semibold text-center underline decoration-2 underline-offset-2">Login</h1>
+                    <div>
+                        <label class="font-medium">Username or Email Address</label>
+                        <input type="text" class="rounded-lg w-full" placeholder="..." />
+                    </div>
+                    <div>
+                        <label class="font-medium">Password</label>
+                        <input type="password" class="rounded-lg w-full" placeholder="..." />
+                    </div>
+                    <div class="flex items-center gap-1">
+                        <input type="checkbox" class="rounded-full cursor-pointer" />
+                        <label class="font-medium">Keep me logged in!</label>
+                    </div>
+                    <div>
+                        <x-btn-pill text="Submit" class="mt-8 py-1.5 px-3 mx-auto shadow-indigo-600 bg-indigo-500 hover:bg-indigo-600 text-white" isFunc="true" call="alert(2)">
+                            <x-slot name="icon">
+                                <x-svg.thumbs-up class="w-6 h-6" stroke="currentColor" fill="none" />
+                            </x-slot>
+                        </x-btn-pill>
+                    </div>
+                </div>
+                <div class="z-10 mx-auto">
+                    <x-link-pill href="/" text="Sign in with Google" class="w-fit border shadow-xl hover:shadow-indigo-100 hover:shadow-md hover:bg-indigo-50 bg-white py-1.5 px-3">
                         <x-slot name="icon">
                             <x-svg.google class="w-6 h-6 inline-block" fill="currentColor" />
                         </x-slot>
                     </x-link-pill>
                 </div>
-
+                <a href="/" class="text-center hover:underline mt-12 z-10 font-medium w-fit block mx-auto underline-offset-2">I've forgot my password</a>
                 <canvas class="-z-1 absolute top-0 left-0" id="c_particles"></canvas>
             </div>
 
