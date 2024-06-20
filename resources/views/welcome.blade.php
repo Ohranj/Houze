@@ -237,7 +237,9 @@
                 Alpine.store('toast').toggle(json.message, false);
                 return;
             }
-            console.log(json)
+            setTimeout(() => {
+                location.href = '/dashboard';
+            }, 500)
         },
         ...e
     })

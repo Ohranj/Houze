@@ -4,16 +4,49 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Auth;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 class AuthenticationTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
-    public function test_login_screen_can_be_rendered(): void
+    /**
+     *
+     */
+    public function test_user_can_login_via_email(): void
     {
-        $response = $this->get('/');
-        $response->assertStatus(200);
+        $response = $this->postJson('/login', [
+            'login' => 'test@example.com',
+            'password' => 'password12345678'
+        ]);
+
+        $response->assertStatus(202)->assertJson(['success' => true]);
+    }
+
+    /**
+     *
+     */
+    public function test_user_can_login_via_username(): void
+    {
+        $response = $this->postJson('/login', [
+            'login' => 'testuser',
+            'password' => 'password12345678'
+        ]);
+
+        $response->assertStatus(202)->assertJson(['success' => true]);
+    }
+
+    /**
+     *
+     */
+    public function test_incorrect_password_prevents_login(): void
+    {
+        $response = $this->postJson('/login', [
+            'login' => 'testuser',
+            'password' => 'incorrectpassword'
+        ]);
+
+        $response->assertStatus(422);
     }
 }

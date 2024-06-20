@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Auth;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 class RegistrationTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     /**
      *
@@ -18,7 +18,7 @@ class RegistrationTest extends TestCase
     {
         $response = $this->postJson('/register', [
             'username' => 'testing123',
-            'email' => 'test@example.com',
+            'email' => fake()->email,
             'password' => 'password1234',
             'password_confirmation' => 'password1234',
         ]);
@@ -29,11 +29,11 @@ class RegistrationTest extends TestCase
     /**
      *
      */
-    public function test_none_matching_password_fail_a_register(): void
+    public function test_none_matching_password_fails_register(): void
     {
         $response = $this->postJson('/register', [
             'username' => 'testing123',
-            'email' => 'test@example.com',
+            'email' => fake()->email,
             'password' => 'password1234',
             'password_confirmation' => 'password12345678',
         ]);
@@ -44,11 +44,11 @@ class RegistrationTest extends TestCase
     /**
      *
      */
-    public function test_short_password_length_fail_a_register(): void
+    public function test_short_password_length_fails_register(): void
     {
         $response = $this->postJson('/register', [
             'username' => 'testing123',
-            'email' => 'test@example.com',
+            'email' => fake()->email,
             'password' => 'passwor',
             'password_confirmation' => 'passwor',
         ]);
@@ -59,11 +59,11 @@ class RegistrationTest extends TestCase
     /**
      *
      */
-    public function test_no_password_numbers_fail_a_register(): void
+    public function test_no_password_numbers_fails_register(): void
     {
         $response = $this->postJson('/register', [
             'username' => 'testing123',
-            'email' => 'test@example.com',
+            'email' => fake()->email,
             'password' => 'passwordpassword',
             'password_confirmation' => 'passwordpassword',
         ]);
@@ -74,22 +74,15 @@ class RegistrationTest extends TestCase
     /**
      *
      */
-    public function test_email_already_exist_fail_a_register(): void
+    public function test_email_already_exist_fails_register(): void
     {
-        $this->postJson('/register', [
-            'username' => 'TestingUser1',
-            'email' => 'test@example.com',
-            'password' => 'password1234',
-            'password_confirmation' => 'password1234',
-        ]);
-
-        $response2 = $this->postJson('/register', [
+        $response = $this->postJson('/register', [
             'username' => 'TestingUser2',
             'email' => 'test@example.com',
             'password' => 'password5678',
             'password_confirmation' => 'password5678',
         ]);
 
-        $response2->assertStatus(422)->assertJsonValidationErrorFor('email');
+        $response->assertStatus(422)->assertJsonValidationErrorFor('email');
     }
 }

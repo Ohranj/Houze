@@ -6,7 +6,6 @@ namespace App\Services;
 
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\StatefulGuard;
-use Illuminate\Support\Facades\Hash;
 
 class CustomGuard implements StatefulGuard
 {
@@ -15,7 +14,6 @@ class CustomGuard implements StatefulGuard
 
     public function __construct(public $provider)
     {
-
     }
 
     /**
@@ -27,12 +25,10 @@ class CustomGuard implements StatefulGuard
      */
     public function attempt(array $credentials = [], $remember = false)
     {
-        dd('attempt');
         if ( ! $this->validate($credentials)) {
             return false;
         }
 
-        $this->user = $this->user();
         $this->login($this->user, $remember);
 
         return true;
@@ -46,7 +42,7 @@ class CustomGuard implements StatefulGuard
      */
     public function once(array $credentials = [])
     {
-
+        dd('once');
     }
 
     /**
@@ -59,7 +55,6 @@ class CustomGuard implements StatefulGuard
     public function login(Authenticatable $user, $remember = false): void
     {
         session([self::PREFIX . '_user_id' => $user->id]);
-        $this->user = $user;
         // if ($remember) {
         //     $this->setRememberMe($user);
         // }
@@ -75,7 +70,7 @@ class CustomGuard implements StatefulGuard
      */
     public function loginUsingId($id, $remember = false)
     {
-
+        dd('login using id');
     }
 
     /**
@@ -86,6 +81,7 @@ class CustomGuard implements StatefulGuard
      */
     public function onceUsingId($id)
     {
+        dd('once using id');
         return false;
     }
 
@@ -96,6 +92,7 @@ class CustomGuard implements StatefulGuard
      */
     public function viaRemember()
     {
+        dd('via remember');
         return false;
     }
 
@@ -106,7 +103,7 @@ class CustomGuard implements StatefulGuard
      */
     public function logout(): void
     {
-
+        dd('logout');
     }
 
     /**
@@ -116,8 +113,7 @@ class CustomGuard implements StatefulGuard
      */
     public function check()
     {
-        $this->user();
-        return false;
+        return $this->user() ? true : false;
     }
 
     /**
@@ -127,6 +123,7 @@ class CustomGuard implements StatefulGuard
      */
     public function guest()
     {
+        dd('guest');
         return false;
     }
 
@@ -165,7 +162,8 @@ class CustomGuard implements StatefulGuard
      */
     public function id()
     {
-        return null;
+        $user = $this->user();
+        return $user ? $user->id : null;
     }
 
     /**
@@ -177,14 +175,11 @@ class CustomGuard implements StatefulGuard
     public function validate(array $credentials = [])
     {
         $user = $this->provider->retrieveByCredentials($credentials);
-
         if ( ! $user) {
             return false;
         }
 
-        $validPassword = Hash::check($credentials['password'], $user->password);
-
-        if ( ! $validPassword) {
+        if ( ! $this->provider->validateCredentials($user, $credentials)) {
             return false;
         }
 
@@ -200,6 +195,7 @@ class CustomGuard implements StatefulGuard
      */
     public function hasUser()
     {
+        dd('has user');
         return false;
     }
 
