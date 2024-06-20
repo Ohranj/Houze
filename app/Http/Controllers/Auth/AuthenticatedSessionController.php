@@ -1,34 +1,33 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Traits\ReturnJsonResponse;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
 {
-    /**
-     * Display the login view.
-     */
-    public function create(): View
-    {
-        return view('auth.login');
-    }
+    use ReturnJsonResponse;
 
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): RedirectResponse
+    public function store(LoginRequest $request): JsonResponse
     {
-        $request->authenticate();
+        return $this->returnJson(success: true, message: 'Authentication success', data: [], status: 202);
 
-        $request->session()->regenerate();
+        // $request->authenticate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        // $request->session()->regenerate();
+
+        // return redirect()->intended(route('dashboard', absolute: false));
     }
 
     /**

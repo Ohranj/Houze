@@ -8,29 +8,29 @@
             <x-unique.guest-nav />
 
             <div class="grow grid place-content-center relative gap-8" id="c_container">
-                <div class="z-10 rounded-md shadow w-[475px] p-6 space-y-6 bg-white border relative overflow-hidden">
+                <form method="post" action="{{route('login.store')}}" @submit.prevent="loginSubmitted($el)" class=" z-10 rounded-md shadow w-[525px] p-6 space-y-6 bg-white border relative overflow-hidden">
                     <div class="w-[50px] h-[50px] absolute -right-[25px] -top-[25px] rounded-full bg-indigo-600"></div>
                     <h1 class="text-xl font-semibold text-center underline decoration-2 underline-offset-2">Login</h1>
                     <div>
                         <label class="font-medium">Username or Email Address</label>
-                        <input type="text" class="rounded-lg w-full" placeholder="..." />
+                        <input type="text" class="rounded-lg w-full" name="login" placeholder="..." />
                     </div>
                     <div>
                         <label class="font-medium">Password</label>
-                        <input type="password" class="rounded-lg w-full" placeholder="..." />
+                        <input type="password" class="rounded-lg w-full" name="password" placeholder="..." />
                     </div>
                     <div class="flex items-center gap-1">
                         <input type="checkbox" class="rounded-full cursor-pointer" />
-                        <label class="font-medium">Keep me logged in!</label>
+                        <label class="font-medium" name="remember_me">Keep me logged in!</label>
                     </div>
                     <div>
-                        <x-btn-pill text="Submit" class="mt-8 py-1.5 px-3 mx-auto shadow-indigo-600 bg-indigo-500 hover:bg-indigo-600 text-white" isFunc="true" call="alert(2)">
+                        <x-btn-pill text="Submit" class="mt-8 py-1.5 px-3 mx-auto shadow-indigo-600 bg-indigo-500 hover:bg-indigo-600 text-white" isFunc="false">
                             <x-slot name="icon">
                                 <x-svg.thumbs-up class="w-6 h-6" stroke="currentColor" fill="none" />
                             </x-slot>
                         </x-btn-pill>
                     </div>
-                </div>
+                </form>
                 <div class="z-10 mx-auto">
                     <x-link-pill href="/" text="Sign in with Google" class="w-fit border shadow-xl hover:shadow-indigo-100 hover:shadow-md hover:bg-indigo-50 bg-white py-1.5 px-3">
                         <x-slot name="icon">
@@ -216,6 +216,28 @@
             }
             Alpine.store('toast').toggle(json.message);
             this.modals.getStarted.show = false;
+
+            setTimeout(() => {
+                location.href = '/dashboard';
+            }, 500)
+        },
+        async loginSubmitted(form) {
+            const formData = new FormData(form);
+            const formAction = form.getAttribute('action');
+            const response = await fetch(formAction, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': this.csrfToken
+                }
+            })
+            const json = await response.json();
+            if (!response.ok) {
+                Alpine.store('toast').toggle(json.message, false);
+                return;
+            }
+            console.log(json)
         },
         ...e
     })

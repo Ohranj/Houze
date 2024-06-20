@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+use App\Providers\AppServiceProvider;
+use App\Providers\CustomAuthProvider;
+
 return [
-    App\Providers\AppServiceProvider::class
+    AppServiceProvider::class,
+    CustomAuthProvider::class
 ];

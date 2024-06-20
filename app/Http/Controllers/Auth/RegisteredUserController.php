@@ -24,8 +24,9 @@ class RegisteredUserController extends Controller
     {
         $user = $createUser->execute(params: $request->validated());
 
+        Auth::login(user: $user, remember: false);
+
         //Fire an email as well
-        //Auth::login($user);
 
         return $this->returnJson(success: true, message: 'Registration confirmed!', data: [], status: 201);
     }
