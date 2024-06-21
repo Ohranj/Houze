@@ -1,34 +1,47 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Traits\ReturnJsonResponse;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\View\View;
+use Illuminate\Validation\ValidationException;
 
 class AuthenticatedSessionController extends Controller
 {
-    /**
-     * Display the login view.
-     */
-    public function create(): View
-    {
-        return view('auth.login');
-    }
+    use ReturnJsonResponse;
 
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): RedirectResponse
+    public function store(LoginRequest $request): JsonResponse
     {
-        $request->authenticate();
+        if ($request->isRateLimited()) {
+            $seconds = $request->rateLimiterAvailableIn();
+            throw ValidationException::withMessages([
+                'email' => trans('auth.throttle', [
+                    'seconds' => $seconds,
+                    'minutes' => ceil($seconds / 60),
+                ]),
+            ]);
+        }
 
-        $request->session()->regenerate();
+        $credentials = $request->validated();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        if ( ! Auth::attempt(credentials: $credentials, remember: $request->remember_me ?? false)) {
+            $request->incrementRateLimiter();
+            throw ValidationException::withMessages(['email' => trans('auth.failed')]);
+        }
+
+        $request->clearRateLimiter();
+
+        return $this->returnJson(success: true, message: 'Authentication success', data: [], status: 202);
     }
 
     /**

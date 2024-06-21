@@ -125,4 +125,8 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'test_user_password' => env('TEST_USER_PASSWORD'),
+    'test_user_email' => env('TEST_USER_EMAIL'),
+    'test_user_username' => env('TEST_USER_USERNAME')
+
 ];
