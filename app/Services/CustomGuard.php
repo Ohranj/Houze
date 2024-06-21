@@ -103,7 +103,8 @@ class CustomGuard implements StatefulGuard
      */
     public function logout(): void
     {
-        dd('logout');
+        session()->invalidate();
+        session()->regenerateToken();
     }
 
     /**

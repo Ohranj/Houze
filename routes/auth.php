@@ -4,20 +4,18 @@ declare(strict_types=1);
 
 use App\Http\Controllers\Auth\{
     AuthenticatedSessionController,
-    ConfirmablePasswordController,
     NewPasswordController,
     PasswordController,
     PasswordResetLinkController,
     RegisteredUserController
 };
-
+use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function (): void {
+    Route::get('/', WelcomeController::class);
     Route::post('register', RegisteredUserController::class)->middleware('throttle:3');
     Route::post('login', [AuthenticatedSessionController::class, 'store'])->middleware('throttle: 5')->name('login.store');
-
-
 
 
     Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])->name('password.request');
@@ -27,7 +25,6 @@ Route::middleware('guest')->group(function (): void {
 });
 
 Route::middleware('auth')->group(function (): void {
-    Route::post('confirm-password', [ConfirmablePasswordController::class, 'store']);
     Route::put('password', [PasswordController::class, 'update'])->name('password.update');
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 });
