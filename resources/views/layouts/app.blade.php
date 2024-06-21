@@ -12,9 +12,9 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="font-sans antialiased text-slate-800 m-0 p-0 min-h-screen">
+<body class="font-normal antialiased text-slate-800 m-0 p-0 min-h-screen flex flex-col">
     <x-unique.auth-nav />
-    <main>
+    <main class="grow bg-gray-50 p-2 sm:px-0 sm:py-12">
         {{ $slot }}
     </main>
 </body>

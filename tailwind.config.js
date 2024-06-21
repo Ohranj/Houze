@@ -14,7 +14,8 @@ export default {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
             colors: {
-                modal: '#cbd5e150'
+                modal: '#cbd5e150',
+                ticked: '#22c55e'
             }
         },
     },
