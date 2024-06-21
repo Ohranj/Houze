@@ -78,7 +78,7 @@ class RegistrationTest extends TestCase
     {
         $response = $this->postJson('/register', [
             'username' => 'TestingUser2',
-            'email' => 'test@example.com',
+            'email' => config('app.test_user_email'),
             'password' => 'password5678',
             'password_confirmation' => 'password5678',
         ]);

@@ -15,11 +15,12 @@ class DummySeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory(10)->create();
         User::factory(1, [
-            'email' => 'test@example.com',
-            'password' => Hash::make('password12345678'),
-            'username' => 'testuser'
+            'email' => config('app.test_user_email'),
+            'password' => Hash::make(config('app.test_user_password')),
+            'username' => config('app.test_user_username')
         ])->create();
+
+        User::factory(10)->create();
     }
 }

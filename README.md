@@ -1,7 +1,10 @@
 https://www.xlmeapp.com/
 
+- [About](#about)
 - [Setup](#setup)
     - [Dev Env](#development)
+        - First steps
+            - [env file](#env-file)
         - Artisan Commands
             - [Seeding Dummy Data](#seeding-dummy-data)
         - Database
@@ -16,11 +19,30 @@ https://www.xlmeapp.com/
         - Server script
 
 
-  
+# About
+
   
 # Setup  
 
 ## Development
+
+### First Steps
+
+```
+docker compose build
+docker compose exec -it house_app bash
+composer install
+npm install
+npm run dev
+```
+
+#### env file
+Please make sure to copy the .env.example file. To seed dummy data and run tests make sure to provide the 3 test user values:
+```
+TEST_USER_EMAIL
+TEST_USER_USERNAME
+TEST_USER_PASSWORD - Please provide a complex password that otherwise passes validation
+``` 
 
 ### Artisan Commands
 
@@ -70,7 +92,9 @@ A .github/workflows/ci.yml file exists that runs the features tests on push.
 ### Tests
 
 #### Feature
-Feature tests are used for core abilities of the application. Testing makes use of the PHPUnit framework
+Feature tests are used for core abilities of the application. Testing makes use of the PHPUnit framework.
+
+Before running the testing command please make sure to have migrated and seeded the database. Please follow the [Seeding Dummy Data](#seeding-dummy-data) section.
 ```
 php artisan test --filter Feature
 ``` 
