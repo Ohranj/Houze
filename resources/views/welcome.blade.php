@@ -216,10 +216,7 @@
             }
             Alpine.store('toast').toggle(json.message);
             this.modals.getStarted.show = false;
-
-            setTimeout(() => {
-                location.href = '/dashboard';
-            }, 500)
+            setTimeout(() => location.href = '/dashboard', 250)
         },
         async loginSubmitted(form) {
             const formData = new FormData(form);
@@ -237,9 +234,7 @@
                 Alpine.store('toast').toggle(json.message, false);
                 return;
             }
-            setTimeout(() => {
-                location.href = '/dashboard';
-            }, 500)
+            location.href = '/dashboard';
         },
         ...e
     })

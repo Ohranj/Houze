@@ -47,4 +47,12 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    /**
+     * Relations
+     */
+    public function network()
+    {
+        return $this->hasOne(Network::class, 'user_id', 'id');
+    }
 }
