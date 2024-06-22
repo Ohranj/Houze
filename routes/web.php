@@ -3,11 +3,15 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\MilestoneController;
+use App\Http\Controllers\RefreshMilestoneOrder;
 use App\Http\Controllers\UsernameExistsController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => ['auth']], function (): void {
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
+    Route::resource('/milestones', MilestoneController::class)->only(['index', 'destroy', 'update', 'store']);
+    Route::post('/refresh-milestones-order', RefreshMilestoneOrder::class);
 });
 
 Route::get('/validate-username-status', UsernameExistsController::class);
