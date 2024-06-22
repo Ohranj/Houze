@@ -55,4 +55,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(Network::class, 'user_id', 'id');
     }
+
+    public function milestones()
+    {
+        return $this->hasMany(Milestone::class, 'user_id', 'id');
+    }
 }

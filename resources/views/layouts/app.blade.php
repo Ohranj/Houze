@@ -8,8 +8,8 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @stack('scripts')
 </head>
 
 <body class="font-normal antialiased text-slate-800 m-0 p-0 min-h-screen flex flex-col">

@@ -1,0 +1,24 @@
+{
+    "milestones": [
+        {
+            "text": "Took the first step! Created an account on Houze.",
+            "complete": true,
+            "order": 1
+        },
+        {
+            "text": "Booked a meeting with a broker.",
+            "complete": false,
+            "order": 2
+        },
+        {
+            "text": "Offer accepted.",
+            "complete": false,
+            "order": 3
+        },
+        {
+            "text": "Date for exchange confirmed.",
+            "complete": false,
+            "order": 4
+        }
+    ]
+}
